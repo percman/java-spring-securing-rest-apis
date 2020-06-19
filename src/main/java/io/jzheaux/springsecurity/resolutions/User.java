@@ -30,7 +30,9 @@ public class User implements Serializable {
     @OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
     Collection<UserAuthority> userAuthorities = new ArrayList<>();
     
-    User() {}
+    User() {
+    	this.id=UUID.randomUUID();
+    }
     
 	public User(String username, String password) {
         this.id = UUID.randomUUID();
