@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -14,6 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -25,13 +28,19 @@ import static org.springframework.http.HttpMethod.GET;
 @SpringBootApplication
 public class ResolutionsApplication extends WebSecurityConfigurerAdapter {
 
+	@Autowired
+    UserRepositoryJwtAuthenticationConverter authenticationConverter;
+	
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
 		http
 	    .authorizeRequests(authz -> authz
 	        .anyRequest().authenticated())
 	    .httpBasic(basic -> {})
-	    .cors(cors -> {});
+	    .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt().jwtAuthenticationConverter(this.authenticationConverter)
+            )
+            .cors(cors -> {});
     }
 	
 	public static void main(String[] args) {

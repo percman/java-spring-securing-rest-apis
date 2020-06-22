@@ -23,8 +23,11 @@ public class User implements Serializable {
 
     @Column
     String password;
+    
+    @Column(name="full_name")
+    String fullName;
 
-    @Column
+	@Column
     boolean enabled = true;
     
     @OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
@@ -46,6 +49,7 @@ public class User implements Serializable {
 	    this.password = user.password;
 	    this.enabled = user.enabled;
 	    this.userAuthorities = user.userAuthorities;
+	    this.fullName = user.fullName;
 	}
 	
 	public Collection<UserAuthority> getUserAuthorities() {
@@ -87,5 +91,13 @@ public class User implements Serializable {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+	
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 }
